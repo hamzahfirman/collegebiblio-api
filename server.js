@@ -54,4 +54,4 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
 //     res.send()
 // })
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port, () => console.log(`Listening on port http://localhost:${port}`))
