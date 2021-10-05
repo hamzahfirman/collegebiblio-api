@@ -23,7 +23,9 @@ app.post('/api/users', (req, res) => {   // Returns all users
     const user = {
         id: data.users.length + 1,
         name: req.body.name,
-        email: req.body.email
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        password: req.body.password
     };
     data.users.push(user);
     res.send(user);
