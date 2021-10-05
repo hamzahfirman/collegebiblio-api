@@ -10,7 +10,7 @@ app.use(express.json()) // Middleware to send JSON
 
 // Route handler or callback function
 app.get('/', (req, res) => {
-    res.send("Hello World!!")
+    res.send("Welcome to CollegeBiblio")
 });
 
 /*  USERS ENDPOINTS  */
