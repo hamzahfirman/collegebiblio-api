@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();  // Object
 const port = process.env.PORT || 3000; // PORT 
 const data = require('../data');
-const db = require('../model/db-aws');
+const db = require('./model/db-aws');
 
 app.use(express.json()) // Middleware to send JSON
 
