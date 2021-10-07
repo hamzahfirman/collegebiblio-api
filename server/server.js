@@ -1,8 +1,10 @@
 // Loads up Express module
+const { response } = require('express');
 const express = require('express');
 const app = express();  // Object
 const port = process.env.PORT || 3000; // PORT 
-const data = require('./data');
+const data = require('../data');
+const db = require('../model/db-aws');
 
 app.use(express.json()) // Middleware to send JSON
 
@@ -16,6 +18,7 @@ app.get('/', (req, res) => {
 /*  USERS ENDPOINTS  */
 
 app.get('/api/users', (req, res) => {   // Returns all users 
+    db.createUserTable().then(() => res.json({message: "DB Connected Successfully!"}))
     res.send(data.users)
 })
 
@@ -56,4 +59,8 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
 //     res.send()
 // })
 
+
+
 app.listen(port, () => console.log(`Listening on port http://localhost:${port}`))
+
+// Heroku URL: https://collegebiblioapi.herokuapp.com/
