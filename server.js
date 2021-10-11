@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 /*  USERS ENDPOINTS  */
 
 app.get('/api/users', (req, res) => {   // Returns all users 
-    // db.createUserTable().then(() => res.json({message: "DB Connected Successfully!"}))
+    db.getUsers().then(() => res.json({message: "Here's all the users"}))
     res.send(data.users)
 })
 
