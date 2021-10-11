@@ -1,8 +1,10 @@
 
 const mysql = require('mysql')
-const dbCred = require('./db-account');
+const dotenv = require('dotenv');
+let instance = null;
+dotenv.config();
 
-const db = mysql.createConnection( {
+const connection = mysql.createConnection( {
     host: 'cbinstance1.ccpv41wveuxp.us-west-1.rds.amazonaws.com',
     user: 'admin',
     password: 'biblio2021!',
@@ -10,38 +12,34 @@ const db = mysql.createConnection( {
 });
 
 // Connect to DB
-db.connect((err) => {
+connection.connect((err) => {
     if(err) throw err;
     console.log('MySql Connected...');
 })
 
-function createUserTable() {
-    let sql = "CREATE TABLE users(id int AUTO_INCREMENT, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(id))";
-
-    db.query(sql, (err, result) => {
-        if(err) {
-            throw err;
-        }
-        console.log(result);
-        return result.rows;
+class DbService {
+    static getDbServiceInstance() {
+        return instance ? instance : new DbService();
     }
-  
-    )
-}
 
-function getUsers() {
-    let sql = "SELECT * FROM users";
-    db.query(sql, (err, result) => {
-        if(err) {
-            throw err;
+    async getAllData() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM users";
+
+                connection.query(query, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
         }
-        console.log(result);
-        return result.rows;
-    }
   
-    )
-}
 
+}}
 
-module.exports = { createUserTable, getUsers }
+module.exports = DbService;
 

@@ -1,16 +1,18 @@
 // Loads up Express module
-const { response } = require('express');
 const express = require('express');
 const app = express();  // Object
 const port = process.env.PORT || 3000; // PORT 
 
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const data = require('./server/data');
-const db = require('./model/db-aws');
+const dbService = require('./model/db-aws');
 
-app.use(express.json()) // Middleware to send JSON
+// Middleware to send JSON
+
+app.use(cors());
+app.use(express.json());
 
 
 
@@ -22,8 +24,14 @@ app.get('/', (req, res) => {
 /*  USERS ENDPOINTS  */
 
 app.get('/api/users', (req, res) => {   // Returns all users 
-    db.getUsers().then(() => res.json({message: "Here's all the users"}))
-    res.send(data.users)
+    const model = dbService.getDbServiceInstance();
+
+    const result = model.getAllData();
+    
+    result
+    .then(data => res.json({data : data}))
+    .catch(err => console.log(err));
+ 
 })
 
 app.post('/api/users', (req, res) => {   // Returns all users 
