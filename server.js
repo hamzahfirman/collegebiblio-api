@@ -50,7 +50,7 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
     const user = data.users.find(c => c.name.toLowerCase() === req.params.name.toLowerCase());
 
     if(!user) {
-        res.status(404).send('The user is not found!')
+        res.status(404).send('The user is not found!!')
     } 
     res.send(user)
 })
