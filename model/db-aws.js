@@ -22,7 +22,7 @@ class DbService {
         return instance ? instance : new DbService();
     }
 
-    async getAllData() {
+    async getAllUsers() {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT * FROM users";
@@ -36,7 +36,31 @@ class DbService {
             return response;
         } catch (error) {
             console.log(error);
+        }}
+
+        
+    async insertNewUser(name, phoneNumber, email, password) {
+        try {
+            const insertId = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO users (name, phonenumber, email, password) VALUES (?,?,?,?);";
+
+                connection.query(query, [name, phoneNumber, email, password], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.insertId);
+                })
+            });
+            // console.log(response);
+            return {
+                id: insertId,
+                name: name,
+                phoneNumber: phoneNumber,
+                email: email,
+                password: password
+            };
+        } catch (error) {
+            console.log(error);
         }
+
   
 
 }}

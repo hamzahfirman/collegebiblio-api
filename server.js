@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/api/users', (req, res) => {   // Returns all users 
     const model = dbService.getDbServiceInstance();
 
-    const result = model.getAllData();
+    const result = model.getAllUsers();
     
     result
     .then(data => res.json({data : data}))
@@ -34,17 +34,16 @@ app.get('/api/users', (req, res) => {   // Returns all users
  
 })
 
-app.post('/api/users', (req, res) => {   // Returns all users 
-    const user = {
-        id: data.users.length + 1,
-        name: req.body.name,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        password: req.body.password
-    };
-    data.users.push(user);
-    res.send(user);
-})
+app.post('/api/users/insert', (req, res) => {   // Returns a new data 
+    const {name, phoneNumber, email, password} = req.body;
+    const model = dbService.getDbServiceInstance();
+
+    result = model.insertNewUser(name, phoneNumber, email, password);
+
+    result
+    .then(data => res.json({data: data}))
+    .catch(err => console.log(err));
+});
 
 app.get('/api/users/:name', (req, res) => {  // Returns a user
     const user = data.users.find(c => c.name.toLowerCase() === req.params.name.toLowerCase());
@@ -54,6 +53,7 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
     } 
     res.send(user)
 })
+
 
 
 /*  BOOKS ENDPOINTS  */
