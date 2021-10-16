@@ -25,7 +25,7 @@ class DbService {
     async getAllUsers() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT * FROM users";
+                const query = "SELECT DISTINCT name, phonenumber, email FROM users";
 
                 connection.query(query, (err, results) => {
                     if (err) reject(new Error(err.message));
