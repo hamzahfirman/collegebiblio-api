@@ -34,16 +34,29 @@ app.get('/api/users', (req, res) => {   // Returns all users
  
 })
 
-app.post('/api/users/insert', (req, res) => {   // Returns a new data 
+app.post('/api/users/signup', (req, res) => {   // Returns a new data when sign up
     const {name, phoneNumber, email, password} = req.body;
     const model = dbService.getDbServiceInstance();
 
-    result = model.insertNewUser(name, phoneNumber, email, password);
+    result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), password.toLowerCase());
 
     result
     .then(data => res.json({data: data}))
     .catch(err => console.log(err));
 });
+
+app.post('/api/users/login', (req, res) => { // Returns a user when login 
+    const {name, password} = req.body;
+    const model = dbService.getDbServiceInstance();
+
+    
+
+    result = model.getAUser(name, password);
+    
+    result
+    .then(data => res.json({data: data}))
+    .catch(err => console.log(err))
+})
 
 app.get('/api/users/:name', (req, res) => {  // Returns a user
     const user = data.users.find(c => c.name.toLowerCase() === req.params.name.toLowerCase());

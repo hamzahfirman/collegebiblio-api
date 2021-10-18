@@ -59,8 +59,23 @@ class DbService {
             };
         } catch (error) {
             console.log(error);
-        }
+        }}
 
+        async getAUser(name, password) {
+            try {
+                const response = await new Promise((resolve, reject) => {
+                    const query = "SELECT * FROM users WHERE name = ? AND password = ?";
+    
+                    connection.query(query,[name, password], (err, result) => {
+                        if (err) reject(new Error(err.message));
+                        resolve(result);
+                    })
+                });
+                console.log(response);
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
   
 
 }}
