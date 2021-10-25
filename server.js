@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/users', (req, res) => {   // Returns all users 
     const model = dbService.getDbServiceInstance();
-
+    
     const result = model.getAllUsers();
     
     result
@@ -51,7 +51,7 @@ app.post('/api/users/login', (req, res) => { // Returns a user when login
 
     
 
-    result = model.getAUser(name, password);
+    result = model.getAUser(name.toLowerCase(), password.toLowerCase());
     
     result
     .then(data => res.json({data: data}))
