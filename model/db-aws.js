@@ -61,12 +61,12 @@ class DbService {
             console.log(error);
         }}
 
-        async getAUser(name, password) {
+        async getAUser(email, password) {
             try {
                 const response = await new Promise((resolve, reject) => {
-                    const query = "SELECT * FROM users WHERE name = ? AND password = ?";
+                    const query = "SELECT * FROM users WHERE email = ? AND password = ?";
     
-                    connection.query(query,[name, password], (err, result) => {
+                    connection.query(query,[email, password], (err, result) => {
                         if (err) reject(new Error(err.message));
                         resolve(result);
                     })

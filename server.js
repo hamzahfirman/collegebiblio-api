@@ -1,7 +1,7 @@
 // Loads up Express module
 const express = require('express');
 const app = express();  // Object
-const port = process.env.PORT || 3000; // PORT 
+const port = process.env.PORT || 3001; // PORT 
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -37,6 +37,7 @@ app.get('/api/users', (req, res) => {   // Returns all users
 app.post('/api/users/signup', (req, res) => {   // Returns a new data when sign up
     const {name, phoneNumber, email, password} = req.body;
     const model = dbService.getDbServiceInstance();
+  
 
     result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), password.toLowerCase());
 
@@ -46,12 +47,12 @@ app.post('/api/users/signup', (req, res) => {   // Returns a new data when sign 
 });
 
 app.post('/api/users/login', (req, res) => { // Returns a user when login 
-    const {name, password} = req.body;
+    const {email, password} = req.body;
     const model = dbService.getDbServiceInstance();
 
     
 
-    result = model.getAUser(name.toLowerCase(), password.toLowerCase());
+    result = model.getAUser(email.toLowerCase(), password.toLowerCase());
     
     result
     .then(data => res.json({data: data}))
