@@ -39,16 +39,25 @@ app.get('/api/users', (req, res) => {   // Returns all users
 app.post('/api/users/signup', async (req, res) => {   // Returns a new data when sign up
    try{
     const {name, phoneNumber, email, password} = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const saltRounds = 10;
+    const myPlaintextPassword = password;
+  
 
-    const model = dbService.getDbServiceInstance();
+    bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+        if(err) {
+            throw err
+        }else {
+
+        const model = dbService.getDbServiceInstance();
     
 
-    result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), hashedPassword.toLowerCase());
-
-    result
-    .then(data => res.json({data: data}))
-    .catch(err => console.log(err));
+        result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), hash);
+    
+        result
+        .then(data => res.json({data: data}))
+        .catch(err => console.log(err));
+    }
+    })
 
    }catch(e){
         console.log(e);
@@ -65,7 +74,7 @@ app.post('/api/users/login', async (req, res) => { // Returns a user when login
         
         result = await model.getAUser(email.toLowerCase());
 
-        const validPassword = await bcrypt.compare(password.toLowerCase(), result[0].password);
+        const validPassword = await bcrypt.compare(password, result[0].password);
         
 
         validPassword ? res.status(200).json("Nice!") : res.json("User not found!");
