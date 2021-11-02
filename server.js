@@ -8,6 +8,8 @@ const cors = require('cors');
 
 const data = require('./server/data');
 const dbService = require('./model/db-aws');
+const bcrypt = require('bcryptjs');
+
 
 // Middleware to send JSON
 
@@ -34,29 +36,46 @@ app.get('/api/users', (req, res) => {   // Returns all users
  
 })
 
-app.post('/api/users/signup', (req, res) => {   // Returns a new data when sign up
+app.post('/api/users/signup', async (req, res) => {   // Returns a new data when sign up
+   try{
     const {name, phoneNumber, email, password} = req.body;
-    const model = dbService.getDbServiceInstance();
-  
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), password.toLowerCase());
+    const model = dbService.getDbServiceInstance();
+    
+
+    result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), hashedPassword.toLowerCase());
 
     result
     .then(data => res.json({data: data}))
     .catch(err => console.log(err));
+
+   }catch(e){
+        console.log(e);
+        res.status(500).send('Invalid information have been inserted!')
+   }
+    
 });
 
-app.post('/api/users/login', (req, res) => { // Returns a user when login 
-    const {email, password} = req.body;
-    const model = dbService.getDbServiceInstance();
+app.post('/api/users/login', async (req, res) => { // Returns a user when login 
 
-    
+    try{
+        const {email, password} = req.body;
+        const model = dbService.getDbServiceInstance();
+        
+        result = await model.getAUser(email.toLowerCase());
 
-    result = model.getAUser(email.toLowerCase(), password.toLowerCase());
-    
-    result
-    .then(data => res.json({data: data}))
-    .catch(err => console.log(err))
+        const validPassword = await bcrypt.compare(password.toLowerCase(), result[0].password);
+        
+
+        validPassword ? res.status(200).json("Nice!") : res.json("User not found!");
+        
+
+    }catch(e){
+        console.log(e);
+        res.status(500).send('Invalid information have been inserted!')
+        
+    }
 })
 
 app.get('/api/users/:name', (req, res) => {  // Returns a user
