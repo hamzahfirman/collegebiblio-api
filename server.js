@@ -72,12 +72,15 @@ app.post('/api/users/login', async (req, res) => { // Returns a user when login
         const {email, password} = req.body;
         const model = dbService.getDbServiceInstance();
         
-        result = await model.getAUser(email.toLowerCase());
+        const result = await model.getAUser(email.toLowerCase());
+        if(result.length == 0){
+            res.json("User is not found! Please try again.")
+        }
 
         const validPassword = await bcrypt.compare(password, result[0].password);
         
 
-        validPassword ? res.status(200).json("Nice!") : res.json("User not found!");
+        validPassword ? res.json({data: result}) : res.json("User not found!");
         
 
     }catch(e){
