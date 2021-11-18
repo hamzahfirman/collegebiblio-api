@@ -8,6 +8,8 @@ const cors = require('cors');
 
 const data = require('./server/data');
 const dbService = require('./model/db-aws');
+const bcrypt = require('bcryptjs');
+
 
 // Middleware to send JSON
 
@@ -34,29 +36,58 @@ app.get('/api/users', (req, res) => {   // Returns all users
  
 })
 
-app.post('/api/users/signup', (req, res) => {   // Returns a new data when sign up
+app.post('/api/users/signup', async (req, res) => {   // Returns a new data when sign up
+   try{
     const {name, phoneNumber, email, password} = req.body;
-    const model = dbService.getDbServiceInstance();
+    const saltRounds = 10;
+    const myPlaintextPassword = password;
   
 
-    result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), password.toLowerCase());
+    bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+        if(err) {
+            throw err
+        }else {
 
-    result
-    .then(data => res.json({data: data}))
-    .catch(err => console.log(err));
+        const model = dbService.getDbServiceInstance();
+    
+
+        result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), hash);
+    
+        result
+        .then(data => res.json({data: data}))
+        .catch(err => console.log(err));
+    }
+    })
+
+   }catch(e){
+        console.log(e);
+        res.status(500).send('Invalid information have been inserted!')
+   }
+    
 });
 
-app.post('/api/users/login', (req, res) => { // Returns a user when login 
-    const {email, password} = req.body;
-    const model = dbService.getDbServiceInstance();
+app.post('/api/users/login', async (req, res) => { // Returns a user when login 
 
-    
+    try{
+        const {email, password} = req.body;
+        const model = dbService.getDbServiceInstance();
+        
+        const result = await model.getAUser(email.toLowerCase());
+        if(result.length == 0){
+            res.json("User is not found! Please try again.")
+        }
 
-    result = model.getAUser(email.toLowerCase(), password.toLowerCase());
-    
-    result
-    .then(data => res.json({data: data}))
-    .catch(err => console.log(err))
+        const validPassword = await bcrypt.compare(password, result[0].password);
+        
+
+        validPassword ? res.json({data: result}) : res.json("User not found!");
+        
+
+    }catch(e){
+        console.log(e);
+        res.status(500).send('Invalid information have been inserted!')
+        
+    }
 })
 
 app.get('/api/users/:name', (req, res) => {  // Returns a user
@@ -70,20 +101,45 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
 
 
 
+
 /*  BOOKS ENDPOINTS  */
 
-// app.get('/api/books', (req, res) => {   // Returns all  books
-//     res.send(["Quantative Research Methods for Communication"])
+// app.get('/api/books', (req, res) => {   // Returns all books 
+//     const model = dbService.getDbServiceInstance();
+    
+//     const result = model.getAllBooks();
+    
+//     result
+//     .then(data => res.json({data : data}))
+//     .catch(err => console.log(err));
+ 
 // })
 
-// app.get('/api/books/:id', (req, res) => {  // Returns a book
-//     const books = books.find(c => c.id === parseInt(req.params.id));
-
-//     if(!books) {
-//         res.status(404).send('The book is not found!')
-//     } 
-//     res.send()
+//  app.get('/api/classes', (req, res) => {   // Returns all classes
+//     const model = dbService.getDbServiceInstance();
+    
+//     const result = model.getAllClasses();
+    
+//     result
+//     .then(data => res.json({data : data}))
+//     .catch(err => console.log(err));
+ 
 // })
+
+// app.post('/api/books/new', (req, res) => {  // Sends a new book data   
+//     // 
+//   try{
+//     const {title, author, courseName, price, photoFront, photoBack, photoInside} = req.body;
+//     const model = dbService.getDbServiceInstance();
+    
+//     const result =  model.insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside);
+   
+
+//   }catch(e){
+//         console.log(e);
+//         res.status(500).send('Invalid information have been inserted!')
+        
+//  }})
 
 
 

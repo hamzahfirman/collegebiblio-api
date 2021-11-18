@@ -1,8 +1,10 @@
-
+ 
 const mysql = require('mysql')
 const dotenv = require('dotenv');
 let instance = null;
+const bcrypt = require('bcryptjs');
 dotenv.config();
+
 
 const connection = mysql.createConnection( {
     host: 'cbinstance1.ccpv41wveuxp.us-west-1.rds.amazonaws.com',
@@ -25,7 +27,7 @@ class DbService {
     async getAllUsers() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT DISTINCT name, phonenumber, email FROM users";
+                const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
 
                 connection.query(query, (err, results) => {
                     if (err) reject(new Error(err.message));
@@ -61,12 +63,12 @@ class DbService {
             console.log(error);
         }}
 
-        async getAUser(email, password) {
+        async getAUser(email) {
             try {
                 const response = await new Promise((resolve, reject) => {
-                    const query = "SELECT * FROM users WHERE email = ? AND password = ?";
-    
-                    connection.query(query,[email, password], (err, result) => {
+                    const query = "SELECT * FROM users WHERE email = ?";
+                
+                    connection.query(query,[email], (err, result) => {
                         if (err) reject(new Error(err.message));
                         resolve(result);
                     })
@@ -76,9 +78,15 @@ class DbService {
             } catch (error) {
                 console.log(error);
             }
-  
+    
 
-}}
+    }   
+        async getAllClasses() {} 
+        async getAllBooks() {}
+        async insertNewBook() {}
+
+
+}
 
 module.exports = DbService;
 
