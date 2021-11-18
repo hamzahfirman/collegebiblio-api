@@ -1,4 +1,4 @@
-
+ 
 const mysql = require('mysql')
 const dotenv = require('dotenv');
 let instance = null;
@@ -78,9 +78,15 @@ class DbService {
             } catch (error) {
                 console.log(error);
             }
-  
+    
 
-}}
+    }   
+        async getAllClasses() {} 
+        async getAllBooks() {}
+        async insertNewBook() {}
+
+
+}
 
 module.exports = DbService;
 
