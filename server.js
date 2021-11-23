@@ -54,7 +54,7 @@ app.post('/api/users/signup', async (req, res) => {   // Returns a new data when
         result = model.insertNewUser(name.toLowerCase(), phoneNumber.toLowerCase(), email.toLowerCase(), hash);
     
         result
-        .then(data => res.json({data: data}))
+        .then(data => res.json({message: data}))
         .catch(err => console.log(err));
     }
     })
@@ -101,24 +101,12 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
 
 
 
-
-/*  BOOKS ENDPOINTS  */
+// /*  BOOKS ENDPOINTS  */
 
 // app.get('/api/books', (req, res) => {   // Returns all books 
 //     const model = dbService.getDbServiceInstance();
     
 //     const result = model.getAllBooks();
-    
-//     result
-//     .then(data => res.json({data : data}))
-//     .catch(err => console.log(err));
- 
-// })
-
-//  app.get('/api/classes', (req, res) => {   // Returns all classes
-//     const model = dbService.getDbServiceInstance();
-    
-//     const result = model.getAllClasses();
     
 //     result
 //     .then(data => res.json({data : data}))
@@ -134,12 +122,28 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
     
 //     const result =  model.insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside);
    
+//     result
+//         .then(data => res.json({message: data}))
+//         .catch(err => console.log(err));
 
 //   }catch(e){
 //         console.log(e);
 //         res.status(500).send('Invalid information have been inserted!')
         
 //  }})
+
+//  /*  CLASSES ENDPOINTS  */
+
+//  app.get('/api/classes', (req, res) => {   // Returns all classes
+//     const model = dbService.getDbServiceInstance();
+    
+//     const result = model.getAllClasses();
+    
+//     result
+//     .then(data => res.json({data : data}))
+//     .catch(err => console.log(err));
+ 
+// })
 
 
 
