@@ -1,7 +1,10 @@
+
+
 // Loads up Express module
 const express = require('express');
 const app = express();  // Object
 const port = process.env.PORT || 3001; // PORT 
+const fileUpload = require('express-fileupload');
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,7 +15,7 @@ const bcrypt = require('bcryptjs');
 
 
 // Middleware to send JSON
-
+app.use(fileUpload())
 app.use(cors());
 app.use(express.json());
 
@@ -103,48 +106,65 @@ app.get('/api/users/:name', (req, res) => {  // Returns a user
 
 // /*  BOOKS ENDPOINTS  */
 
-// app.get('/api/books', (req, res) => {   // Returns all books 
-//     const model = dbService.getDbServiceInstance();
+app.get('/api/books', (req, res) => {   // Returns all books 
+    const model = dbService.getDbServiceInstance();
     
-//     const result = model.getAllBooks();
+    const result = model.getAllBooks();
     
-//     result
-//     .then(data => res.json({data : data}))
-//     .catch(err => console.log(err));
+    result
+    .then(data => res.json({data : data}))
+    .catch(err => console.log(err));
  
-// })
+})
 
-// app.post('/api/books/new', (req, res) => {  // Sends a new book data   
-//     // 
-//   try{
-//     const {title, author, courseName, price, photoFront, photoBack, photoInside} = req.body;
-//     const model = dbService.getDbServiceInstance();
-    
-//     const result =  model.insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside);
+app.post('/api/books/new', (req, res) => {  // Sends a new book data   
+    // 
+  try{
+    const {title, author, courseName, price, photoFront, photoBack, photoInside} = req.body;
+    const model = dbService.getDbServiceInstance();
+
+
+    console.log(req.body)
+    // const result =  model.insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside);
    
-//     result
-//         .then(data => res.json({message: data}))
-//         .catch(err => console.log(err));
+    // result
+    //     .then(data => res.json({message: data}))
+    //     .catch(err => console.log(err));
 
-//   }catch(e){
-//         console.log(e);
-//         res.status(500).send('Invalid information have been inserted!')
+  }catch(e){
+        console.log(e);
+        res.status(500).send('Invalid information have been inserted!')
         
-//  }})
+ }})
 
-//  /*  CLASSES ENDPOINTS  */
+ /*  CLASSES ENDPOINTS  */
 
-//  app.get('/api/classes', (req, res) => {   // Returns all classes
-//     const model = dbService.getDbServiceInstance();
+ app.get('/api/classes', (req, res) => {   // Returns all classes
+    const model = dbService.getDbServiceInstance();
     
-//     const result = model.getAllClasses();
+    const result = model.getAllClasses();
     
-//     result
-//     .then(data => res.json({data : data}))
-//     .catch(err => console.log(err));
+    result
+    .then(data => res.json({data : data}))
+    .catch(err => console.log(err));
  
-// })
+})
 
+
+
+/* Image Uploads */
+
+// app.post('', (req, res) => {
+//     let sampleFile;
+//     let uploadPath;
+
+//     if(!req.files || Object.keys(req.files).length === 0 ){
+//         return res.status(400).send('No files were uploaded')
+//     }
+
+//     sampleFile = req.files.sampleFile;
+     
+// })
 
 
 app.listen(port, () => console.log(`Listening on port http://localhost:${port}`))

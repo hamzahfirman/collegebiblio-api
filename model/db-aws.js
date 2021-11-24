@@ -74,55 +74,55 @@ class DbService {
     
 
     }   
-        // async getAllClasses() {
-        //     try {
-        //         const response = await new Promise((resolve, reject) => {
-        //             const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
+        async getAllClasses() {
+            try {
+                const response = await new Promise((resolve, reject) => {
+                    const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
     
-        //             connection.query(query, (err, results) => {
-        //                 if (err) reject(new Error(err.message));
-        //                 resolve(results);
-        //             })
-        //         });
-        //         // console.log(response);
-        //         return response;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // } 
+                    connection.query(query, (err, results) => {
+                        if (err) reject(new Error(err.message));
+                        resolve(results);
+                    })
+                });
+                // console.log(response);
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
+        } 
 
-        // async getAllBooks() {
-        //     try {
-        //         const response = await new Promise((resolve, reject) => {
-        //             const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
+        async getAllBooks() {
+            try {
+                const response = await new Promise((resolve, reject) => {
+                    const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
     
-        //             connection.query(query, (err, results) => {
-        //                 if (err) reject(new Error(err.message));
-        //                 resolve(results);
-        //             })
-        //         });
-        //         // console.log(response);
-        //         return response;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // } 
-        // async insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside) {
-        //     try {
-        //         const insertId = await new Promise((resolve, reject) => {
-        //             const query = "INSERT INTO books (title, author, courseName, price, photoFront, photoBack, photoInside) VALUES (?,?,?,?,?,?,?);";
+                    connection.query(query, (err, results) => {
+                        if (err) reject(new Error(err.message));
+                        resolve(results);
+                    })
+                });
+                // console.log(response);
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+        async insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside) {
+            try {
+                const insertId = await new Promise((resolve, reject) => {
+                    const query = "INSERT INTO books (title, author, courseName, price, photoFront, photoBack, photoInside) VALUES (?,?,?,?,?,?,?);";
     
-        //             connection.query(query, [title, author, courseName, price, photoFront, photoBack, photoInside], (err, result) => {
-        //                 if (err) reject(new Error(err.message));
-        //                 resolve(result.insertId);
-        //             })
-        //         });
-        //         // console.log(response);
-        //         return "Success! A new book has been added. "
-        //         ;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }}
+                    connection.query(query, [title, author, courseName, price, photoFront, photoBack, photoInside], (err, result) => {
+                        if (err) reject(new Error(err.message));
+                        resolve(result.insertId);
+                    })
+                });
+                // console.log(response);
+                return "Success! A new book has been added. "
+                ;
+            } catch (error) {
+                console.log(error);
+            }}
         }
 
 module.exports = DbService;
