@@ -25,7 +25,7 @@ class DbService {
     async getAllUsers() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
+                const query = "SELECT * FROM users;";
 
                 connection.query(query, (err, results) => {
                     if (err) reject(new Error(err.message));
@@ -39,14 +39,14 @@ class DbService {
         }}
 
         
-    async insertNewUser(name, phoneNumber, email, password) {
+    async insertNewUser(firstName, lastName, phoneNumber, email) {
         try {
-            const insertId = await new Promise((resolve, reject) => {
-                const query = "INSERT INTO users (name, phonenumber, email, password) VALUES (?,?,?,?);";
+            const response = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO users (first_name, last_name, phone_number, email) VALUES (?,?,?,?);";
 
-                connection.query(query, [name, phoneNumber, email, password], (err, result) => {
+                connection.query(query, [firstName, lastName, phoneNumber, email], (err, result) => {
                     if (err) reject(new Error(err.message));
-                    resolve(result.insertId);
+                    resolve(result);
                 })
             });
             // console.log(response);
@@ -56,12 +56,80 @@ class DbService {
             console.log(error);
         }}
 
-        async getAUser(email) {
+    async getAUser(email) {
+        try {
+            
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT first_name FROM users WHERE email = ?";
+            
+                connection.query(query,[email], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result);
+                })
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+
+
+}   
+    async getAllClasses() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
+
+                connection.query(query, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+} 
+
+    async getAllBooks() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM textbook_information;";
+
+                connection.query(query, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    } 
+    async insertNewBook(title, isbn13,  authors, courseName, sellingPrice, textbookQuality, sellerName, textbookImage) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO textbook_information (textbook_title, isbn_13,  textbook_author, course_name, textbook_price, textbook_condition, seller_name, textbook_image) VALUES (?,?,?,?,?,?,?,?);";
+                connection.query(query, [title, isbn13,  authors, courseName, sellingPrice, textbookQuality, sellerName, textbookImage], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result);
+                })
+            });
+            console.log(response);
+            return "Success! A new book has been added. "
+            ;
+        } catch (error) {
+            console.log(error);
+        }}
+
+    async searchBook(value) {
             try {
                 const response = await new Promise((resolve, reject) => {
-                    const query = "SELECT * FROM users WHERE email = ?";
-                
-                    connection.query(query,[email], (err, result) => {
+    
+                    const query = "SELECT * FROM textbook_information WHERE textbook_title="+ value +";";
+                    connection.query(query, (err, result) => {
                         if (err) reject(new Error(err.message));
                         resolve(result);
                     })
@@ -70,60 +138,8 @@ class DbService {
                 return response;
             } catch (error) {
                 console.log(error);
-            }
-    
-
-    }   
-        async getAllClasses() {
-            try {
-                const response = await new Promise((resolve, reject) => {
-                    const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
-    
-                    connection.query(query, (err, results) => {
-                        if (err) reject(new Error(err.message));
-                        resolve(results);
-                    })
-                });
-                // console.log(response);
-                return response;
-            } catch (error) {
-                console.log(error);
-            }
-        } 
-
-        async getAllBooks() {
-            try {
-                const response = await new Promise((resolve, reject) => {
-                    const query = "SELECT DISTINCT name, phonenumber, email, password FROM users";
-    
-                    connection.query(query, (err, results) => {
-                        if (err) reject(new Error(err.message));
-                        resolve(results);
-                    })
-                });
-                // console.log(response);
-                return response;
-            } catch (error) {
-                console.log(error);
-            }
-        } 
-        async insertNewBook(title, author, courseName, price, photoFront, photoBack, photoInside) {
-            try {
-                const insertId = await new Promise((resolve, reject) => {
-                    const query = "INSERT INTO books (title, author, courseName, price, photoFront, photoBack, photoInside) VALUES (?,?,?,?,?,?,?);";
-    
-                    connection.query(query, [title, author, courseName, price, photoFront, photoBack, photoInside], (err, result) => {
-                        if (err) reject(new Error(err.message));
-                        resolve(result.insertId);
-                    })
-                });
-                // console.log(response);
-                return "Success! A new book has been added. "
-                ;
-            } catch (error) {
-                console.log(error);
             }}
-        }
+    }
 
 module.exports = DbService;
 
