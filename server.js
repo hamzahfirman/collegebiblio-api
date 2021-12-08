@@ -146,7 +146,7 @@ app.post("/api/books/search", (req, res) => {
     );
 
     result
-      .then((data) => res.json({ message: data }))
+      .then((data) => res.json({ data: data }))
       .catch((err) => console.log(err));
   } catch (e) {
     console.log(e);

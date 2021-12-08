@@ -128,7 +128,7 @@ class DbService {
             try {
                 const response = await new Promise((resolve, reject) => {
     
-                    const query = "SELECT * FROM textbook_information WHERE textbook_title="+ value +";";
+                    const query = "SELECT * FROM textbook_information WHERE textbook_title LIKE '%"+ value +"%';";
                     connection.query(query, (err, result) => {
                         if (err) reject(new Error(err.message));
                         resolve(result);
